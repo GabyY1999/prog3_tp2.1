@@ -33,4 +33,4 @@ Para ello, se solicita completar la implementación de cada una de los ejercicio
 
 ## Licencia
 
-Este repositorio se comparte bajo la licencia **MIT**. Para más información, consultar el archivo [LICENSE](/LICENSE).
+Este repositorio se comparte bajo la licencia **MIT**. Para más información, consultar el archivo [LICENSE](/LICENSE)...
