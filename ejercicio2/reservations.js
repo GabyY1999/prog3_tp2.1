@@ -1,7 +1,41 @@
-class Customer {}
+            /************************CLASE CUSTOMER*********************/
+class Customer {
+    constructor(id, name, email) {
+        //propiedades
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
 
-class Reservation {}
+    //propiedad computada
+    get info() {
+        return `${this.name} (${this.email})`;
+    }
+}
+            /************************CLASE RESERVATION*********************/
+class Reservation {
+    constructor(id, customer, date, guests) {
+        //propiedades
+        this.id = id;
+        this.customer = customer;
+        this.date = new Date(date);
+        this.guests = guests;
+    }
 
+    //propiedad computada
+    get info() {
+        return `Fecha y hora: ${this.date.toLocaleString()}, Cliente: ${this.customer.info}, Comensales: ${this.guests}`;
+    }
+
+    //metodo estatico
+    static validateReservation(date, guests) {
+        const reservationDate = new Date(date);
+        const now = new Date();
+        return reservationDate > now && guests > 0;
+    }
+}
+
+            /************************CLASE RESTAURANT*********************/
 class Restaurant {
     constructor(name) {
         this.name = name;
