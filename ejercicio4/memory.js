@@ -1,5 +1,6 @@
 class Card {
     constructor(name, img) {
+        //propiedades
         this.name = name;
         this.img = img;
         this.isFlipped = false;
@@ -31,10 +32,22 @@ class Card {
         const cardElement = this.element.querySelector(".card");
         cardElement.classList.remove("flipped");
     }
+    toggleFlip() {
+        if (this.isFlipped) {
+            this.#unflip();
+        } else {
+            this.#flip();
+        }
+    }
+
+    matches(otherCard) {
+        return this.name === otherCard.name;
+    }
 }
 
 class Board {
     constructor(cards) {
+        //propiedades
         this.cards = cards;
         this.fixedGridElement = document.querySelector(".fixed-grid");
         this.gameBoardElement = document.getElementById("game-board");
@@ -74,10 +87,28 @@ class Board {
             this.onCardClick(card);
         }
     }
+    shuffleCards() {
+        for (let i = this.cards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
+        }
+    }
+
+    flipDownAllCards() {
+        this.cards.forEach(card => card.isFlipped && card.toggleFlip());
+    }
+
+    reset() {
+        this.shuffleCards();
+        this.flipDownAllCards();
+        this.render();
+    }
 }
 
+                /*******************************CLASE MEMORY GAME   ******************* */
 class MemoryGame {
     constructor(board, flipDuration = 500) {
+        //atributos
         this.board = board;
         this.flippedCards = [];
         this.matchedCards = [];
@@ -102,6 +133,33 @@ class MemoryGame {
             }
         }
     }
+    #handleCardClick(card) {
+        if (this.flippedCards.length < 2 && !card.isFlipped) {
+            card.toggleFlip();
+            this.flippedCards.push(card);
+
+            if (this.flippedCards.length === 2) {
+                setTimeout(() => this.checkForMatch(), this.flipDuration);
+            }
+        }
+    }
+
+    checkForMatch() {
+        const [card1, card2] = this.flippedCards;
+        if (card1.matches(card2)) {
+            this.matchedCards.push(card1, card2);
+        } else {
+            card1.toggleFlip();
+            card2.toggleFlip();
+        }
+        this.flippedCards = [];
+    }
+
+    resetGame() {
+        this.flippedCards = [];
+        this.matchedCards = [];
+        this.board.reset();
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -124,4 +182,5 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("restart-button").addEventListener("click", () => {
         memoryGame.resetGame();
     });
+
 });
