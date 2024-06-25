@@ -11,27 +11,30 @@ class Card {
         const cardElement = document.createElement("div");
         cardElement.classList.add("cell");
         cardElement.innerHTML = `
-          <div class="card" data-name="${this.name}">
-              <div class="card-inner">
-                  <div class="card-front"></div>
-                  <div class="card-back">
-                      <img src="${this.img}" alt="${this.name}">
-                  </div>
-              </div>
-          </div>
-      `;
+            <div class="card" data-name="${this.name}">
+                <div class="card-inner">
+                    <div class="card-front"></div>
+                    <div class="card-back">
+                        <img src="${this.img}" alt="${this.name}">
+                    </div>
+                </div>
+            </div>
+        `;
         return cardElement;
     }
 
     #flip() {
         const cardElement = this.element.querySelector(".card");
         cardElement.classList.add("flipped");
+        this.isFlipped = true;
     }
 
     #unflip() {
         const cardElement = this.element.querySelector(".card");
         cardElement.classList.remove("flipped");
+        this.isFlipped = false;
     }
+
     toggleFlip() {
         if (this.isFlipped) {
             this.#unflip();
@@ -87,6 +90,7 @@ class Board {
             this.onCardClick(card);
         }
     }
+
     shuffleCards() {
         for (let i = this.cards.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -105,7 +109,6 @@ class Board {
     }
 }
 
-                /*******************************CLASE MEMORY GAME   ******************* */
 class MemoryGame {
     constructor(board, flipDuration = 500) {
         //atributos
@@ -123,16 +126,6 @@ class MemoryGame {
         this.board.reset();
     }
 
-    #handleCardClick(card) {
-        if (this.flippedCards.length < 2 && !card.isFlipped) {
-            card.toggleFlip();
-            this.flippedCards.push(card);
-
-            if (this.flippedCards.length === 2) {
-                setTimeout(() => this.checkForMatch(), this.flipDuration);
-            }
-        }
-    }
     #handleCardClick(card) {
         if (this.flippedCards.length < 2 && !card.isFlipped) {
             card.toggleFlip();
@@ -182,5 +175,4 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("restart-button").addEventListener("click", () => {
         memoryGame.resetGame();
     });
-
 });
